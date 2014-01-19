@@ -1,4 +1,4 @@
-golang-websocket (0.0~git20140119-1) UNRELEASED; urgency=low
+golang-websocket (0.0~git20140119-1) unstable; urgency=low
 
   * Initial package. Closes: #720943.
 
