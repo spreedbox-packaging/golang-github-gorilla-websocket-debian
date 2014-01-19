@@ -1,0 +1,22 @@
+#!/usr/bin/make -f
+
+export DH_OPTIONS
+export DH_GOPKG := github.com/gorilla/websocket
+
+%:
+	dh $@ --buildsystem=golang --with=golang
+
+.PHONY: get-orig-source
+PKD  = $(abspath $(dir $(MAKEFILE_LIST)))
+PKG  = $(word 2,$(shell dpkg-parsechangelog -l$(PKD)/changelog | grep ^Source))
+VER ?= $(shell dpkg-parsechangelog -l$(PKD)/changelog | perl -ne 'print $$1 if m{^Version:\s+(?:\d+:)?(\d.*)(?:\-\d+.*)};')
+UDATE= $(shell TZ=UTC date --rfc-3339=seconds --date='$(shell echo $(VER) | perl -ne 'print "$$1-$$2-$$3" if m/~git(\d{4})(\d{2})(\d{2})$$/')')
+get-orig-source: $(PKG)_$(VER).orig.tar.xz $(info I: $(PKG)_$(VER))
+$(PKG)_$(VER).orig.tar.xz:
+	GOPATH=$(PKG)-$(VER) go get -d $(DH_GOPKG)
+	cd $(PKG)-$(VER)/src/$(DH_GOPKG) \
+	&& git checkout $$(git log -n1 --format=%h --before="$(UDATE)") \
+	&& git archive --prefix $(PKG)-$(VER)/ HEAD > $(PKG)-$(VER).tar \
+	&& xz $(PKG)-$(VER).tar
+	mv $(PKG)-$(VER)/src/$(DH_GOPKG)/$(PKG)-$(VER).tar.xz $@
+	rm -rf $(PKG)-$(VER)

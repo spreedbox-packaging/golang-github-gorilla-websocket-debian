@@ -1,0 +1,5 @@
+golang-websocket (0.0~git20140119-1) UNRELEASED; urgency=low
+
+  * Initial package. Closes: #720943.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 19 Jan 2014 14:42:03 +0100

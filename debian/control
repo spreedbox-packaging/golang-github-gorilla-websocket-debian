@@ -1,0 +1,20 @@
+Source: golang-websocket
+Section: devel
+Priority: extra
+Maintainer: Debian Go Packaging Team <pkg-go-maintainers@lists.alioth.debian.org>
+Uploaders: Vincent Bernat <bernat@debian.org>
+Build-Depends: debhelper (>= 8.0.0),
+               dh-golang,
+               golang-go
+Standards-Version: 3.9.5
+Vcs-Git: git://anonscm.debian.org/pkg-go/packages/golang-websocket.git
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-go/packages/golang-websocket.git;a=summary
+
+Package: golang-websocket-dev
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, dpkg-dev
+Built-Using: ${misc:Built-Using}
+Description: Go package implementing the WebSocket protocol
+ The Gorilla WebSocket package provides a complete and tested
+ implementation of the WebSocket protocol, as defined by RFC 6455. It
+ passes the server tests in the Autobahn WebSockets Test Suite.
