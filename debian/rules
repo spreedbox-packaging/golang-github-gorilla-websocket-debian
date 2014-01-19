@@ -6,6 +6,13 @@ export DH_GOPKG := github.com/gorilla/websocket
 %:
 	dh $@ --buildsystem=golang --with=golang
 
+override_dh_auto_install:
+	dh_auto_install
+	# Remove extra examples
+	rm -rf debian/golang-websocket-dev/usr/share/gocode/src/github.com/gorilla/websocket/examples
+	# Remove stuff in /usr/bin
+	rm -rf debian/golang-websocket-dev/usr/bin
+
 .PHONY: get-orig-source
 PKD  = $(abspath $(dir $(MAKEFILE_LIST)))
 PKG  = $(word 2,$(shell dpkg-parsechangelog -l$(PKD)/changelog | grep ^Source))
