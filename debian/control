@@ -13,7 +13,6 @@ Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-go/packages/golang-websocke
 Package: golang-websocket-dev
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, dpkg-dev
-Built-Using: ${misc:Built-Using}
 Description: Go package implementing the WebSocket protocol
  The Gorilla WebSocket package provides a complete and tested
  implementation of the WebSocket protocol, as defined by RFC 6455. It
