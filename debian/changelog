@@ -1,3 +1,9 @@
+golang-websocket (0.0~git20140119-1+struktur0) precise; urgency=low
+
+  * Initial backport to ubuntu/precise, no further changes.
+
+ -- Lance Cooper <lance@struktur.de>  Mon, 05 May 2014 13:15:51 -0500
+
 golang-websocket (0.0~git20140119-1) unstable; urgency=low
 
   * Initial package. Closes: #720943.
