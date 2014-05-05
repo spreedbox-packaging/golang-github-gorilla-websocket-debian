@@ -17,13 +17,22 @@ override_dh_auto_install:
 PKD  = $(abspath $(dir $(MAKEFILE_LIST)))
 PKG  = $(word 2,$(shell dpkg-parsechangelog -l$(PKD)/changelog | grep ^Source))
 VER ?= $(shell dpkg-parsechangelog -l$(PKD)/changelog | perl -ne 'print $$1 if m{^Version:\s+(?:\d+:)?(\d.*)(?:\-\d+.*)};')
+UURL = git://github.com/gorilla/websocket.git
 UDATE= $(shell TZ=UTC date --rfc-3339=seconds --date='$(shell echo $(VER) | perl -ne 'print "$$1-$$2-$$3" if m/~git(\d{4})(\d{2})(\d{2})$$/')')
+
 get-orig-source: $(PKG)_$(VER).orig.tar.xz $(info I: $(PKG)_$(VER))
-$(PKG)_$(VER).orig.tar.xz:
-	GOPATH=$(PKG)-$(VER) go get -d $(DH_GOPKG)
-	cd $(PKG)-$(VER)/src/$(DH_GOPKG) \
-	&& git checkout $$(git log -n1 --format=%h --before="$(UDATE)") \
-	&& git archive --prefix $(PKG)-$(VER)/ HEAD > $(PKG)-$(VER).tar \
-	&& xz $(PKG)-$(VER).tar
-	mv $(PKG)-$(VER)/src/$(DH_GOPKG)/$(PKG)-$(VER).tar.xz $@
-	rm -rf $(PKG)-$(VER)
+
+$(PKG)_$(VER)$(DTYPE).orig.tar.xz: $(info I: UDATE=$(UDATE))
+		$(if $(wildcard $(PKG)-$(VER)),$(error $(PKG)-$(VER) exist, aborting..))
+		@echo "# Downloading..."
+		@git clone --quiet $(UURL) $(PKG)-$(VER) || $(RM) -r $(PKG)-$(VER)
+		@cd $(PKG)-$(VER) \
+		&& git checkout --quiet $$(git log -n1 --format=%h --before="$(UDATE)") \
+		&& echo "# Setting times..." \
+		&& for F in $$(git ls-tree -r --name-only HEAD); do touch --no-dereference -d "$$(git log -1 --format="%ai" -- $$F)" "$$F"; done \
+		&& echo "# Cleaning-up..." \
+		&& $(RM) -r .git .git*
+		@echo "# Packing..."
+		@find -L "$(PKG)-$(VER)" -xdev -type f -print | sort \
+		| XZ_OPT="-6v" tar -caf "$(PKG)_$(VER)$(DTYPE).orig.tar.xz" -T- --owner=root --group=root --mode=a+rX \
+		&& $(RM) -r "$(PKG)-$(VER)"
