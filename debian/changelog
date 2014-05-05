@@ -1,3 +1,10 @@
+golang-websocket (0.0~git20140505-1) precise; urgency=low
+
+  * Update to latest upstream sources.
+  * The get-orig-source target fetches directly from upstream.
+
+ -- Lance Cooper <lance@struktur.de>  Mon, 05 May 2014 15:15:50 -0500
+
 golang-websocket (0.0~git20140119-1+struktur0) precise; urgency=low
 
   * Initial backport to ubuntu/precise, no further changes.
