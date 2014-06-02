@@ -1,3 +1,9 @@
+golang-websocket (0.0~git20140505-2) precise; urgency=low
+
+  * Build for arch all, not arch any.
+
+ -- Lance Cooper <lance@struktur.de>  Mon, 02 Jun 2014 17:22:43 -0500
+
 golang-websocket (0.0~git20140505-1) precise; urgency=low
 
   * Update to latest upstream sources.

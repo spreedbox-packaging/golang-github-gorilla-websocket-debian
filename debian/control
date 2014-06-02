@@ -11,7 +11,7 @@ Vcs-Git: git://anonscm.debian.org/pkg-go/packages/golang-websocket.git
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-go/packages/golang-websocket.git;a=summary
 
 Package: golang-websocket-dev
-Architecture: any
+Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}, dpkg-dev
 Description: Go package implementing the WebSocket protocol
  The Gorilla WebSocket package provides a complete and tested
