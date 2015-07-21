@@ -6,6 +6,7 @@ package websocket
 
 import (
 	"encoding/json"
+	"io"
 )
 
 // WriteJSON is deprecated, use c.WriteJSON instead.
@@ -38,12 +39,19 @@ func ReadJSON(c *Conn, v interface{}) error {
 // ReadJSON reads the next JSON-encoded message from the connection and stores
 // it in the value pointed to by v.
 //
-// See the documentation for the encoding/json Marshal function for details
+// See the documentation for the encoding/json Unmarshal function for details
 // about the conversion of JSON to a Go value.
 func (c *Conn) ReadJSON(v interface{}) error {
 	_, r, err := c.NextReader()
 	if err != nil {
 		return err
 	}
-	return json.NewDecoder(r).Decode(v)
+	err = json.NewDecoder(r).Decode(v)
+	if err == io.EOF {
+		// Decode returns io.EOF when the message is empty or all whitespace.
+		// Convert to io.ErrUnexpectedEOF so that application can distinguish
+		// between an error reading the JSON value and the connection closing.
+		err = io.ErrUnexpectedEOF
+	}
+	return err
 }
